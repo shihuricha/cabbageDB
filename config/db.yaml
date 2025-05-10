@@ -1,0 +1,11 @@
+id: 1
+peers: {
+}
+log_level: INFO
+listen_sql: 0.0.0.0:9605
+listen_raft: 0.0.0.0:9705
+data_dir: data
+compact_threshold: 0.2
+sync: true
+storage_raft: bitcask
+storage_sql: bitcask
