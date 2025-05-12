@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"cabbageDB/bitcask"
 	"cabbageDB/gobReg"
 	"cabbageDB/log"
@@ -10,26 +9,10 @@ import (
 	"cabbageDB/sql/engine"
 	"flag"
 	"fmt"
-	"github.com/google/btree"
 	"github.com/spf13/viper"
 	"path/filepath"
 	"strconv"
 )
-
-type St struct {
-	Pos1 int64
-	Pos2 int64
-}
-
-type ByteItem struct {
-	Key   []byte
-	Value *St
-}
-
-func (bi *ByteItem) Less(than btree.Item) bool {
-	other := than.(*ByteItem)
-	return bytes.Compare(bi.Key, other.Key) < 0
-}
 
 func main() {
 
