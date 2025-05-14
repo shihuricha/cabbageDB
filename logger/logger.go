@@ -4,13 +4,20 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
+	"path/filepath"
 )
 
 var log *zap.SugaredLogger
 
 func InitLogger(cfgID string, cfgLogLevel string) {
+
+	logDir := filepath.Join(".", "logs")
+	if err := os.MkdirAll(logDir, 0755); err != nil {
+		log.Fatalf("failed to create logs directory: %v", err)
+	}
+
 	// 创建日志文件
-	file, err := os.OpenFile("server_"+cfgID+".log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	file, err := os.OpenFile("./logs/server_"+cfgID+".log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		panic("failed to open log file: " + err.Error())
 	}
