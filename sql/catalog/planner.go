@@ -896,6 +896,9 @@ func BuildAggregation(scope *Scope, source Node, groups []*ast.ExprAS, aggregati
 }
 
 func equalExpr(expr1, expr2 ast.Expression) bool {
+	if expr1 == nil || expr2 == nil {
+		return false
+	}
 	switch expr1.(type) {
 	case *ast.Field:
 		return equalFieldExpr(expr1, expr2)
