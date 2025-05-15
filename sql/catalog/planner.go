@@ -423,21 +423,6 @@ func (p *Planner) BuildFromItem(scope *Scope, item ast.FromItem) (Node, error) {
 			Outer:     outer,
 		}
 
-		if v.Type == ast.RightJoin {
-			var expressions []*ExprAs
-			for i := leftSize; i < leftSize; i++ {
-
-				expr := &ExprAs{
-					Expr: &expr.Field{Index: i, ColumnField: scope.GetLabel(i)},
-				}
-				expressions = append(expressions, expr)
-				scope.Project(expressions)
-				node = &ProjectionNode{
-					Source:      node,
-					Expressions: expressions,
-				}
-			}
-		}
 		return node, nil
 
 	}
@@ -744,6 +729,9 @@ func (s *Scope) Project(expressions []*ExprAs) {
 		}
 
 	}
+	s.Qualified = scope.Qualified
+	s.Ambiguous = scope.Ambiguous
+	s.UnQualified = scope.UnQualified
 	s.Columns = scope.Columns
 
 }

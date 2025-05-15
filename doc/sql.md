@@ -224,7 +224,7 @@ INSERT INTO employees (employee_id, name, department, position, salary)
     order_id INT PRIMARY KEY,
     user_id INT,
     product VARCHAR(50),
-    amount DECIMAL(10,2)
+    amount FLOAT
   );
   
   INSERT INTO users (id, username, email) VALUES
