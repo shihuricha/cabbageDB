@@ -295,7 +295,7 @@ func (p *Planner) BuildStatement(statement ast.Stmt) (Node, error) {
 func InjectHidden(expr1 ast.Expression, selectExprPtr *[]*ast.ExprAS) (ast.Expression, int) {
 	selectExpr := *selectExprPtr
 	for i, exprAs := range selectExpr {
-		if equalFuncExpr(expr1, exprAs.Expr) {
+		if equalExpr(expr1, exprAs.Expr) {
 			expr1 = &ast.ColumnIdx{i}
 			continue
 		}
@@ -321,8 +321,8 @@ func InjectHidden(expr1 ast.Expression, selectExprPtr *[]*ast.ExprAS) (ast.Expre
 	expr1 = ast.Transform(expr1, func(expression ast.Expression) ast.Expression {
 		if v, ok := expression.(*ast.Function); ok {
 			if AggregateFromName(v.FuncName) != -1 {
-				if _, ok2 := v.Args[0].(*ast.ColumnIdx); ok2 {
-					if IsAggregate(v.Args[0]) {
+				if idx, ok2 := v.Args[0].(*ast.ColumnIdx); ok2 {
+					if IsAggregate(selectExpr[idx.Index].Expr) {
 						return nil
 					}
 				}
@@ -374,7 +374,6 @@ func (p *Planner) BuildFromClause(scope *Scope, from []ast.FromItem) (Node, erro
 			Right:    right,
 			Outer:    false,
 		}
-		//scope.
 	}
 	return node, nil
 }
@@ -893,6 +892,17 @@ func BuildAggregation(scope *Scope, source Node, groups []*ast.ExprAS, aggregati
 	return &AggregationNode{
 		Source:     &ProjectionNode{Source: source, Expressions: exprAss},
 		Aggregates: aggregates,
+	}
+}
+
+func equalExpr(expr1, expr2 ast.Expression) bool {
+	switch expr1.(type) {
+	case *ast.Field:
+		return equalFieldExpr(expr1, expr2)
+	case *ast.Function:
+		return equalFuncExpr(expr1, expr2)
+	default:
+		return false
 	}
 }
 
