@@ -199,7 +199,7 @@ func (p *Planner) BuildStatement(statement ast.Stmt) (Node, error) {
 							field := &expr.Field{
 								Index: allFieldIdx,
 								ColumnField: &expr.ColumnField{
-									TbaleName:  v1.TableName,
+									TableName:  v1.TableName,
 									ColumnName: table1.Columns[i].Name,
 								},
 							}
@@ -451,7 +451,7 @@ func BuildExpression(scope *Scope, expr1 ast.Expression) expr.Expression {
 		return &expr.Field{
 			Index: index,
 			ColumnField: &expr.ColumnField{
-				TbaleName:  v.TableName,
+				TableName:  v.TableName,
 				ColumnName: v.ColumnName,
 			},
 		}
@@ -637,7 +637,7 @@ func (s *Scope) AddColumn(tableName string, label string) {
 		}
 	}
 	s.Columns = append(s.Columns, &expr.ColumnField{
-		TbaleName:  tableName,
+		TableName:  tableName,
 		ColumnName: label,
 	})
 
@@ -709,20 +709,20 @@ func (s *Scope) Project(expressions []*ExprAs) {
 
 		if filed.ColumnField == nil && len(scope.Columns) >= filed.Index {
 			f := s.Columns[filed.Index]
-			scope.AddColumn(f.TbaleName, f.ColumnName)
+			scope.AddColumn(f.TableName, f.ColumnName)
 			continue
 		}
 
-		if filed.ColumnField.ColumnName != "" && filed.ColumnField.TbaleName != "" {
-			scope.AddColumn(filed.ColumnField.TbaleName, filed.ColumnField.ColumnName)
+		if filed.ColumnField.ColumnName != "" && filed.ColumnField.TableName != "" {
+			scope.AddColumn(filed.ColumnField.TableName, filed.ColumnField.ColumnName)
 			continue
 		}
 
-		if filed.ColumnField.ColumnName != "" && filed.ColumnField.TbaleName == "" {
+		if filed.ColumnField.ColumnName != "" && filed.ColumnField.TableName == "" {
 			index, ok1 := s.UnQualified[filed.ColumnField.ColumnName]
 			if ok1 {
 				v := s.Columns[index]
-				scope.AddColumn(v.TbaleName, v.ColumnName)
+				scope.AddColumn(v.TableName, v.ColumnName)
 			}
 			continue
 		}

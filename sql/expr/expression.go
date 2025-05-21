@@ -31,7 +31,7 @@ type Field struct {
 	ColumnField *ColumnField
 }
 type ColumnField struct {
-	TbaleName  string
+	TableName  string
 	ColumnName string
 }
 
