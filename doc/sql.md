@@ -167,6 +167,30 @@ INSERT INTO sales (id,product_name, price, quantity) VALUES
 
   <img src="./expr.png"  style="zoom:80%;" />
 
+- = 
+
+- \>
+
+- \>=
+
+  ![image-20250522191657295](./eq.png)
+
+- <
+
+- \<=
+
+- !=
+
+  ![image-20250522191856850](./noteq.png)
+
+- and / &&
+
+  ![image-20250522192005141](./and.png)
+
+- or / ||
+
+  ![image-20250522192434068](./or.png)
+
 ## 7.可解析关键词
 
 - ORDER BY

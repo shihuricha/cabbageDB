@@ -150,7 +150,8 @@ func init() {
 	initTokenString("<=", le)
 	initTokenString("!=", neq)
 	initTokenString("<>", neqSynonym)
-	//initTokenString("%", wildcard)
+	initTokenString("&&", and)
+	initTokenString("||", or)
 
 	initTokenFunc("0123456789", startWithNumber)
 	initTokenFunc("'\"", scanString)
