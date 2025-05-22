@@ -3,6 +3,7 @@ package catalog
 import (
 	"cabbageDB/sql"
 	"cabbageDB/sql/expr"
+	"cabbageDB/sqlparser/ast"
 )
 
 type Optimizer interface {
@@ -59,13 +60,14 @@ func (f *FilterPushdown) OptimizerIter(node Node) Node {
 				}
 			}
 		case *NestedLoopJoinNode:
-			predicate := f.PushDownJoin(v.Predicate, v.Left, v.Right, v.LeftSize)
+			predicate := f.PushDownJoin(v.Predicate, v.Left, v.Right, v.LeftSize, v.Type)
 			return &NestedLoopJoinNode{
 				Left:      v.Left,
 				LeftSize:  v.LeftSize,
 				Right:     v.Right,
 				Predicate: predicate,
 				Outer:     v.Outer,
+				Type:      v.Type,
 			}
 		}
 		return node1
@@ -110,7 +112,7 @@ func (f *FilterPushdown) PushDown(expression expr.Expression, target Node) expr.
 		return expression
 	}
 }
-func (f *FilterPushdown) PushDownJoin(predicate expr.Expression, left Node, right Node, boundary int) expr.Expression {
+func (f *FilterPushdown) PushDownJoin(predicate expr.Expression, left Node, right Node, boundary int, joinType ast.JoinType) expr.Expression {
 	cnf := expr.IntoCnfList(predicate)
 	pushLeft, cnf := partitionCNF(cnf, func(expr1 expr.Expression) bool {
 		if field, ok := expr1.(*expr.Field); ok {
@@ -173,7 +175,7 @@ func (f *FilterPushdown) PushDownJoin(predicate expr.Expression, left Node, righ
 	}
 
 	pushLeftExpr := expr.FromCnfList(&pushLeft)
-	if pushLeftExpr != nil {
+	if joinType != ast.LeftJoin && pushLeftExpr != nil {
 		remainder := f.PushDown(pushLeftExpr, left)
 		if remainder != nil {
 			cnf = append(cnf, remainder)
@@ -181,7 +183,7 @@ func (f *FilterPushdown) PushDownJoin(predicate expr.Expression, left Node, righ
 	}
 
 	pushRightExpr := expr.FromCnfList(&pushRight)
-	if pushRightExpr != nil {
+	if joinType != ast.RightJoin && pushRightExpr != nil {
 		pushRightExpr = expr.Transform(pushRightExpr, func(expr1 expr.Expression) expr.Expression {
 			if v, ok := expr1.(*expr.Field); ok {
 				return &expr.Field{

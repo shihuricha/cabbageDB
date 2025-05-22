@@ -131,6 +131,7 @@ type NestedLoopJoinNode struct {
 	Right     Node
 	Predicate expr.Expression
 	Outer     bool
+	Type      ast.JoinType
 }
 
 func (n *NestedLoopJoinNode) NodeIter() {
@@ -301,6 +302,7 @@ func NodeTransform(node Node, before NodeFn, after NodeFn) Node {
 			Right:     NodeTransform(v.Right, before, after),
 			Predicate: v.Predicate,
 			Outer:     v.Outer,
+			Type:      v.Type,
 		}
 	case *OffsetNode:
 		node = &OffsetNode{
@@ -370,6 +372,7 @@ func NodeTransformExpressions(node Node, before expr.ExprFn, after expr.ExprFn) 
 				Right:     v.Right,
 				Predicate: expr.Transform(v.Predicate, before, after),
 				Outer:     v.Outer,
+				Type:      v.Type,
 			}
 		}
 	case *ProjectionNode:

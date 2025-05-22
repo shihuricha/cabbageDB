@@ -420,6 +420,7 @@ func (p *Planner) BuildFromItem(scope *Scope, item ast.FromItem) (Node, error) {
 			Right:     right,
 			Predicate: predicate,
 			Outer:     outer,
+			Type:      v.Type,
 		}
 
 		return node, nil
