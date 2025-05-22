@@ -910,7 +910,7 @@ func IntoNnf(expr Expression) Expression {
 			case *And:
 				return &Or{L: &Not{L: v2.L}, R: &Not{L: v2.R}}
 			case *Or:
-				return &And{L: &Not{L: v2.L}, R: &Not{L: v2.L}}
+				return &And{L: &Not{L: v2.L}, R: &Not{L: v2.R}}
 			case *Not:
 				return v2.L
 			default:
