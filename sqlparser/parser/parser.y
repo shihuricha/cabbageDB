@@ -2,9 +2,9 @@
 package parser
 
 import (
-	"myfirstdb/sqlparser/ast"
-	"myfirstdb/sqlparser/model"
-	"myfirstdb/sql"
+	"cabbageDB/sqlparser/ast"
+	"cabbageDB/sqlparser/model"
+	"cabbageDB/sql"
 )
 
 %}
@@ -380,6 +380,10 @@ Expression:
             Operation:&ast.NotOper{L: $2},
         }
 	}
+|   '(' Expression ')'
+    {
+        $$ = $2
+    }
 |	BoolPri
 
 

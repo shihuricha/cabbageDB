@@ -171,7 +171,7 @@ INSERT INTO sales (id,product_name, price, quantity) VALUES
 
 - \>
 
-- \>=
+- \>= / <>
 
   ![image-20250522191657295](./eq.png)
 
@@ -179,7 +179,7 @@ INSERT INTO sales (id,product_name, price, quantity) VALUES
 
 - \<=
 
-- !=
+- != / <>
 
   ![image-20250522191856850](./noteq.png)
 
@@ -190,6 +190,10 @@ INSERT INTO sales (id,product_name, price, quantity) VALUES
 - or / ||
 
   ![image-20250522192434068](./or.png)
+
+- 嵌套and、or
+
+  ![image-20250522202100905](./cnf.png)
 
 ## 7.可解析关键词
 
