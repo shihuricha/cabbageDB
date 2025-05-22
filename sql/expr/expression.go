@@ -109,9 +109,10 @@ func (n *Not) Evaluate(row []*sql.ValueData) *sql.ValueData {
 	}
 
 	if lhs.Type == sql.BoolType {
+		value := lhs.Value.(bool)
 		return &sql.ValueData{
 			Type:  sql.BoolType,
-			Value: lhs.Value,
+			Value: !value,
 		}
 	}
 	if lhs.Type == sql.NullType {
