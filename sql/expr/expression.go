@@ -928,10 +928,10 @@ func IntoCnf(expr Expression) Expression {
 	return Transform(IntoNnf(expr), func(expression Expression) Expression {
 		if v, ok := expression.(*Or); ok {
 			if v1, ok1 := v.L.(*And); ok1 {
-				return &And{L: &Or{L: v1.L, R: v1.R}, R: v.R}
+				return &And{L: &Or{L: v1.L, R: v.R}, R: &Or{L: v1.R, R: v.R}}
 			}
 			if v2, ok2 := v.R.(*And); ok2 {
-				return &And{L: v2.L, R: &Or{L: v2.L, R: v2.R}}
+				return &And{L: &Or{L: v.L, R: v2.L}, R: &Or{L: v.L, R: v2.R}}
 			}
 			return &Or{L: v.L, R: v.R}
 
